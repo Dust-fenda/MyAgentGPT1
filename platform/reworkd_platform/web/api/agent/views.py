@@ -30,7 +30,7 @@ from reworkd_platform.web.api.agent.tools.tools import get_external_tools, get_t
 
 router = APIRouter()
 
-
+#启动任务的 API 端点，该端点接受任务目标并调用任务代理服务来生成新任务
 @router.post(
     "/start",
 )
@@ -38,6 +38,7 @@ async def start_tasks(
     req_body: AgentRun = Depends(agent_start_validator),
     agent_service: AgentService = Depends(get_agent_service(agent_start_validator)),
 ) -> NewTasksResponse:
+    #如果调用start_goal_agent 则不会有next
     new_tasks = await agent_service.start_goal_agent(goal=req_body.goal)
     return NewTasksResponse(newTasks=new_tasks, run_id=req_body.run_id)
 

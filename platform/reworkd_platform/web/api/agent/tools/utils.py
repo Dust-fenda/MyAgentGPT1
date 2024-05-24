@@ -30,7 +30,7 @@ class Snippet:
         """
         return f"{{text: {self.text}}}"
 
-
+#大模型的总结功能
 def summarize(
     model: BaseChatModel,
     language: str,

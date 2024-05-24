@@ -64,13 +64,17 @@ async def openai_error_handler(
             e, "There was an unexpected issue getting a response from the AI model."
         )
 
-
+#调用语言模型并处理可能的错误
 async def call_model_with_handling(
+    #函数签名
     model: BaseChatModel,
     prompt: BasePromptTemplate,
     args: Dict[str, str],
     settings: ModelSettings,
+    #其他可选参数
     **kwargs: Any,
 ) -> str:
+    #传递语言模型和提示模板实例来创建 LLMChain实例
     chain = LLMChain(llm=model, prompt=prompt)
+    #调用 openai_error_handler 函数来执行链的运行并处理可能的错误
     return await openai_error_handler(chain.arun, args, settings=settings, **kwargs)

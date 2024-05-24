@@ -6,7 +6,7 @@ from langchain import LLMChain
 
 from reworkd_platform.web.api.agent.tools.tool import Tool
 
-
+#这个可以替换为 自定义工具
 class Code(Tool):
     description = "Should only be used to write code, refactor code, fix code bugs, and explain programming concepts."
     public_description = "Write and review code."

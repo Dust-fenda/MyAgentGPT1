@@ -25,7 +25,7 @@ export default class AnalyzeTaskWork implements AgentWork {
     }
     this.parent.api.saveMessages([message]);
   };
-
+  // 这个next会执行别的
   next = () => {
     if (!this.analysis) return undefined;
     return new ExecuteTaskWork(this.parent, this.task, this.analysis);

@@ -81,6 +81,7 @@ class PineconeMemory(AgentMemory):
         vector = self.embeddings.embed_query(text)
         results = self.index.query(
             vector=vector,
+            #5个子问题 写死 
             top_k=5,
             include_metadata=True,
             include_values=True,

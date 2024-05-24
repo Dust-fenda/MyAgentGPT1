@@ -1,6 +1,7 @@
 from typing import TypeVar
 
 from fastapi import Body, Depends
+#用 SQLAlchemy 进行数据库操作
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from reworkd_platform.db.crud.agent import AgentCRUD
@@ -17,7 +18,7 @@ from reworkd_platform.schemas.agent import (
 )
 from reworkd_platform.schemas.user import UserBase
 from reworkd_platform.web.api.dependencies import get_current_user
-
+#泛型类型 T, T 可以是 AgentTaskAnalyze, AgentTaskExecute ..AgentChat等
 T = TypeVar(
     "T", AgentTaskAnalyze, AgentTaskExecute, AgentTaskCreate, AgentSummarize, AgentChat
 )
@@ -40,11 +41,11 @@ async def agent_start_validator(
         },
     ),
     crud: AgentCRUD = Depends(agent_crud),
-) -> AgentRun:
+) -> AgentRun:  #函数签名
     id_ = (await crud.create_run(body.goal)).id
     return AgentRun(**body.dict(), run_id=str(id_))
 
-
+#通用的验证函数 validate ， crud: 一个 AgentCRUD 实例 ，type_: 一个 Loop_Step 类型的值，用于指定任务的类型
 async def validate(body: T, crud: AgentCRUD, type_: Loop_Step) -> T:
     body.run_id = (await crud.create_task(body.run_id, type_)).id
     return body
@@ -57,6 +58,7 @@ async def agent_analyze_validator(
     return await validate(body, crud, "analyze")
 
 
+#验证并处理一个执行任务(AgentTaskExecute)
 async def agent_execute_validator(
     body: AgentTaskExecute = Body(
         example={
@@ -69,8 +71,10 @@ async def agent_execute_validator(
             },
         },
     ),
+    #依赖于 agent_crud 来获取 AgentCRUD 实例
     crud: AgentCRUD = Depends(agent_crud),
 ) -> AgentTaskExecute:
+    #使用 validate 函数来完成实际的验证和处理工作
     return await validate(body, crud, "execute")
 
 

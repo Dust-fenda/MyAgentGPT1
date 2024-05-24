@@ -43,6 +43,7 @@ class Settings(BaseSettings):
     host: str = "127.0.0.1"
     port: int = 8000
     workers_count: int = 1
+    #reload 热重载模式
     reload: bool = True
     environment: ENVIRONMENT = "development"
     log_level: LOG_LEVEL = "INFO"
@@ -52,7 +53,7 @@ class Settings(BaseSettings):
     secret_signing_key: str = "JF52S66x6WMoifP5gZreiguYs9LYMn0lkXqgPYoNMD0="
 
     # OpenAI
-    openai_api_base: str = "https://api.openai.com/v1"
+    openai_api_base: str = "https://api.nextapi.fun"
     openai_api_key: str = "<Should be updated via env>"
     openai_api_version: str = "2023-08-01-preview"
     azure_openai_deployment_name: str = "<Should be updated via env if using azure>"

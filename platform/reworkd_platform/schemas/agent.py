@@ -4,12 +4,13 @@ from typing import Any, Dict, List, Literal, Optional
 from pydantic import BaseModel, Field, validator
 
 from reworkd_platform.web.api.agent.analysis import Analysis
-
+#一组字面量类型 表示可以使用的语言模型名称
 LLM_Model = Literal[
     "gpt-3.5-turbo",
     "gpt-3.5-turbo-16k",
     "gpt-4",
 ]
+#表示循环中的不同步骤
 Loop_Step = Literal[
     "start",
     "analyze",

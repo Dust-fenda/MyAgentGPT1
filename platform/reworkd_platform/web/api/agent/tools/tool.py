@@ -7,7 +7,7 @@ from langchain.chat_models.base import BaseChatModel
 from reworkd_platform.db.crud.oauth import OAuthCrud
 from reworkd_platform.schemas.user import UserBase
 
-
+# 抽象基类 具体的工具类需要继承该基类 并实现抽象方法call 该基类定义基本结构、接口
 class Tool(ABC):
     description: str = ""
     public_description: str = ""

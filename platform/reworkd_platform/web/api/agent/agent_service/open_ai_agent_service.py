@@ -58,6 +58,7 @@ class OpenAIAgentService(AgentService):
         self.oauth_crud = oauth_crud
 
     async def start_goal_agent(self, *, goal: str) -> List[str]:
+        # 使用 from_messages 方法创建聊天提示模板
         prompt = ChatPromptTemplate.from_messages(
             [SystemMessagePromptTemplate(prompt=start_goal_prompt)]
         )
@@ -69,7 +70,7 @@ class OpenAIAgentService(AgentService):
                 language=self.settings.language,
             ).to_string(),
         )
-
+        #用于封装对语言模型的调用，并处理可能的错误   completion变量的类型是str 是对话完返回的文本结果
         completion = await call_model_with_handling(
             self.model,
             ChatPromptTemplate.from_messages(
@@ -81,6 +82,7 @@ class OpenAIAgentService(AgentService):
         )
 
         task_output_parser = TaskOutputParser(completed_tasks=[])
+        # 是一个用来解析模型响应的函数，同时处理可能出现的错误。这个函数通常用于确保解析过程的鲁棒性，即使在面对不常见或异常的响应时也能提供有用的错误信息或回退机制。
         tasks = parse_with_handling(task_output_parser, completion)
 
         return tasks
@@ -203,7 +205,7 @@ class OpenAIAgentService(AgentService):
         results: List[str],
     ) -> FastAPIStreamingResponse:
         self.model.model_name = "gpt-3.5-turbo-16k"
-        prompt = ChatPromptTemplate.from_messages(
+        prompt = ChatPromptTemplate.from_messages(   
             [
                 SystemMessagePromptTemplate(prompt=chat_prompt),
                 *[HumanMessage(content=result) for result in results],

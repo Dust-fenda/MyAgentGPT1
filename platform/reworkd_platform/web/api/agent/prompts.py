@@ -2,6 +2,11 @@ from langchain import PromptTemplate
 
 # Create initial tasks using plan and solve prompting
 # https://github.com/AGI-Edgerunners/Plan-and-Solve-Prompting
+#用于生成任务的搜索查询列表
+#请返回一份搜索查询列表，列出回答整个目标所需的查询。
+#请将列表限制为最多 5 个查询。确保查询尽可能简洁。
+#对于简单的问题，请使用单个查询。
+#以字符串的 JSON 数组形式返回响应。
 start_goal_prompt = PromptTemplate(
     template="""You are a task creation AI called AgentGPT. 
 You answer in the "{language}" language. You have the following objective "{goal}". 
@@ -22,6 +27,10 @@ query: "What are the nutritional values of almond milk and soy milk?", answer: [
 )
 
 analyze_task_prompt = PromptTemplate(
+    #高层目标："{goal}"
+    #当前任务："{task}
+    #根据这些信息，使用最佳功能取得进展或完全完成任务。
+    #聪明高效地选择正确的功能。确保 "推理 "且只能是 "推理"。
     template="""
     High level objective: "{goal}"
     Current task: "{task}"
@@ -54,7 +63,10 @@ code_prompt = PromptTemplate(
     """,
     input_variables=["goal", "language", "task"],
 )
-
+#用"{language}"语言作答。
+#给定以下总目标"{goal}"和子任务"{task}"。
+#通过理解问题、提取变量、聪明高效地完成任务。针对任务写出详细的答复。 
+#面对选择时，自己做出有理有据的决定。
 execute_task_prompt = PromptTemplate(
     template="""Answer in the "{language}" language. Given
     the following overall objective `{goal}` and the following sub-task, `{task}`.
@@ -65,7 +77,14 @@ execute_task_prompt = PromptTemplate(
     """,
     input_variables=["goal", "language", "task"],
 )
-
+#您有以下未完成任务： `{tasks}`
+#您刚刚完成了以下任务：`{lastTask}`
+#并得到了以下结果：`{结果}`。
+#在此基础上，创建一个由人工智能系统完成的新任务，以便更接近您的目标。 
+#如果没有更多任务需要完成，则什么也不返回。不要在任务中添加引号。
+#示例：在网上搜索 NBA 新闻 
+#创建一个函数，在数图中添加一个具有指定权重的新顶点。 
+#搜索有关 Bertie W 的任何其他信息。
 create_tasks_prompt = PromptTemplate(
     template="""You are an AI task creation agent. You must answer in the "{language}"
     language. You have the following objective `{goal}`.
@@ -90,7 +109,11 @@ create_tasks_prompt = PromptTemplate(
     """,
     input_variables=["goal", "language", "tasks", "lastTask", "result"],
 )
-
+#    将以下文本合并为一份连贯的文件：
+#    按照目标"{goal}"的预期风格，使用清晰的标记符格式进行写作。 
+#    尽可能清晰、翔实，并进行必要的描述。 
+#    不得在上述文本之外编造信息或添加任何信息。 仅使用给定的信息，不得使用其他任何信息。
+#    如果没有提供任何信息，就说 "没有什么可总结的"。
 summarize_prompt = PromptTemplate(
     template="""You must answer in the "{language}" language.
 
@@ -154,7 +177,11 @@ summarize_with_sources_prompt = PromptTemplate(
     """,
     input_variables=["language", "query", "snippets"],
 )
-
+#解析并概括以下文本片段"{snippets}"。 
+#按照目标"{goal}"的预期风格，使用清晰的标记符格式进行写作。 
+#尽可能清晰、翔实并具有描述性，并尝试尽可能回答查询"{query}"："
+#如果有任何片段与查询无关，请忽略它们，不要将其包含在摘要中。 不要提及您忽略了它们。
+#如果没有提供任何信息，就说 "没有什么可总结的"。
 summarize_sid_prompt = PromptTemplate(
     template="""You must answer in the "{language}" language.
 
@@ -170,7 +197,9 @@ summarize_sid_prompt = PromptTemplate(
     """,
     input_variables=["goal", "language", "query", "snippets"],
 )
-
+#   你是一个乐于助人的人工智能助理，会根据当前对话历史记录提供回复。
+#   人类将提供以前的信息作为背景。请仅使用这些信息进行回复，不要胡编乱造，也不要添加任何其他信息。 
+#   如果您在对话历史中没有某个问题的相关信息，请说 "我没有这方面的任何信息"。
 chat_prompt = PromptTemplate(
     template="""You must answer in the "{language}" language.
 

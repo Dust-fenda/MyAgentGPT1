@@ -40,7 +40,7 @@ def test_helicone_disabled():
     settings = Settings()
 
     base, headers, use_helicone = get_base_and_headers(settings, model_settings, user)
-    assert base == "https://api.openai.com/v1"
+    assert base == "https://api.nextapi.fun"
     assert headers is None
     assert use_helicone is False
 
@@ -58,7 +58,7 @@ def test_helicone_enabled_with_custom_api_key():
 
     base, headers, use_helicone = get_base_and_headers(settings, model_settings, user)
 
-    assert base == "https://api.openai.com/v1"
+    assert base == "https://api.nextapi.fun"
     assert headers is None
     assert use_helicone is False
 
@@ -82,7 +82,7 @@ def test_create_model(streaming, use_azure):
     )
 
     settings.openai_api_base = (
-        "https://api.openai.com" if not use_azure else "https://oai.azure.com"
+        "https://api.nextapi.fun" if not use_azure else "https://oai.azure.com"
     )
     settings.openai_api_key = "key"
     settings.openai_api_version = "version"
