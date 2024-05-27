@@ -31,6 +31,7 @@ analyze_task_prompt = PromptTemplate(
     #当前任务："{task}
     #根据这些信息，使用最佳功能取得进展或完全完成任务。
     #聪明高效地选择正确的功能。确保 "推理 "且只能是 "推理"。
+    #从多个GPTs中选择合适的那个Prompt-GPT
     template="""
     High level objective: "{goal}"
     Current task: "{task}"
@@ -43,7 +44,8 @@ analyze_task_prompt = PromptTemplate(
     """,
     input_variables=["goal", "task", "language"],
 )
-
+#具体的工具是通过code_prompt等这种tool_prompt提示的方式 训练大模型GPTs作为tools
+#经过prompt训练的大模型本身也是tool
 code_prompt = PromptTemplate(
     template="""
     You are a world-class software engineer and an expert in all programing languages,
@@ -67,6 +69,7 @@ code_prompt = PromptTemplate(
 #给定以下总目标"{goal}"和子任务"{task}"。
 #通过理解问题、提取变量、聪明高效地完成任务。针对任务写出详细的答复。 
 #面对选择时，自己做出有理有据的决定。
+#通过大模型解决子任务时作为prompt提示传给大模型，便于问题能够更准确的解决
 execute_task_prompt = PromptTemplate(
     template="""Answer in the "{language}" language. Given
     the following overall objective `{goal}` and the following sub-task, `{task}`.
